@@ -1,10 +1,10 @@
-import { ref } from "vue"
-import { defineStore } from "pinia"
-import { type RouteLocationNormalized } from "vue-router"
+import { ref } from 'vue'
+import { defineStore } from 'pinia'
+import { type RouteLocationNormalized } from 'vue-router'
 
 export type ITagView = Partial<RouteLocationNormalized>
 
-export const useTagsViewStore = defineStore("tags-view", () => {
+export const useTagsViewStore = defineStore('tags-view', () => {
   const visitedViews = ref<ITagView[]>([])
   const cachedViews = ref<string[]>([])
 
@@ -26,7 +26,7 @@ export const useTagsViewStore = defineStore("tags-view", () => {
     visitedViews.value.push(Object.assign({}, view))
   }
   const addCachedView = (view: ITagView) => {
-    if (typeof view.name !== "string") return
+    if (typeof view.name !== 'string') return
     if (cachedViews.value.includes(view.name)) return
     if (view.meta?.keepAlive) {
       cachedViews.value.push(view.name)
@@ -44,7 +44,7 @@ export const useTagsViewStore = defineStore("tags-view", () => {
     }
   }
   const delCachedView = (view: ITagView) => {
-    if (typeof view.name !== "string") return
+    if (typeof view.name !== 'string') return
     const index = cachedViews.value.indexOf(view.name)
     index > -1 && cachedViews.value.splice(index, 1)
   }
@@ -57,7 +57,7 @@ export const useTagsViewStore = defineStore("tags-view", () => {
     })
   }
   const delOthersCachedViews = (view: ITagView) => {
-    if (typeof view.name !== "string") return
+    if (typeof view.name !== 'string') return
     const index = cachedViews.value.indexOf(view.name)
     if (index > -1) {
       cachedViews.value = cachedViews.value.slice(index, index + 1)
@@ -89,6 +89,6 @@ export const useTagsViewStore = defineStore("tags-view", () => {
     delOthersVisitedViews,
     delOthersCachedViews,
     delAllVisitedViews,
-    delAllCachedViews
+    delAllCachedViews,
   }
 })

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { computed } from "vue"
-import { useAppStore, DeviceType } from "@/store/modules/app"
-import { useSettingsStore } from "@/store/modules/settings"
-import { AppMain, NavigationBar, Settings, Sidebar, TagsView, RightPanel } from "./components"
-import useResize from "./hooks/useResize"
+import { computed } from 'vue'
+import { useAppStore, DeviceType } from '@/store/modules/app'
+import { useSettingsStore } from '@/store/modules/settings'
+import { AppMain, NavigationBar, Settings, Sidebar, TagsView, RightPanel } from './components'
+import useResize from './hooks/useResize'
 
 const appStore = useAppStore()
 const settingsStore = useSettingsStore()
@@ -18,7 +18,7 @@ const classObj = computed(() => {
     withoutAnimation: appStore.sidebar.withoutAnimation,
     mobile: appStore.device === DeviceType.Mobile,
     showGreyMode: showGreyMode.value,
-    showColorWeakness: showColorWeakness.value
+    showColorWeakness: showColorWeakness.value,
   }
 })
 
@@ -60,7 +60,7 @@ const handleClickOutside = () => {
 </template>
 
 <style lang="scss" scoped>
-@import "@/styles/mixins.scss";
+@import '@/styles/mixins.scss';
 
 .app-wrapper {
   @include clearfix;

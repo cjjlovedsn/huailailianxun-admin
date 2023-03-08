@@ -1,12 +1,12 @@
-import router from "@/router"
-import { useUserStoreHook } from "@/store/modules/user"
-import { usePermissionStoreHook } from "@/store/modules/permission"
-import { ElMessage } from "element-plus"
-import { whiteList } from "@/config/white-list"
-import { getToken } from "@/utils/cache/cookies"
-import asyncRouteSettings from "@/config/async-route"
-import NProgress from "nprogress"
-import "nprogress/nprogress.css"
+import router from '@/router'
+import { useUserStoreHook } from '@/store/modules/user'
+import { usePermissionStoreHook } from '@/store/modules/permission'
+import { ElMessage } from 'element-plus'
+import { whiteList } from '@/config/white-list'
+import { getToken } from '@/utils/cache/cookies'
+import asyncRouteSettings from '@/config/async-route'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 NProgress.configure({ showSpinner: false })
 
@@ -16,9 +16,9 @@ router.beforeEach(async (to, _from, next) => {
   const permissionStore = usePermissionStoreHook()
   // 判断该用户是否登录
   if (getToken()) {
-    if (to.path === "/login") {
+    if (to.path === '/login') {
       // 如果已经登录，并准备进入 Login 页面，则重定向到主页
-      next({ path: "/" })
+      next({ path: '/' })
       NProgress.done()
     } else {
       // 检查用户是否已获得其权限角色
@@ -45,8 +45,8 @@ router.beforeEach(async (to, _from, next) => {
         } catch (err: any) {
           // 过程中发生任何错误，都直接重置 Token，并重定向到登录页面
           userStore.resetToken()
-          ElMessage.error(err.message || "路由守卫过程发生错误")
-          next("/login")
+          ElMessage.error(err.message || '路由守卫过程发生错误')
+          next('/login')
           NProgress.done()
         }
       } else {
@@ -60,7 +60,7 @@ router.beforeEach(async (to, _from, next) => {
       next()
     } else {
       // 其他没有访问权限的页面将被重定向到登录页面
-      next("/login")
+      next('/login')
       NProgress.done()
     }
   }

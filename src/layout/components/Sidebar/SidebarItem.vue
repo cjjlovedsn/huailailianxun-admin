@@ -1,27 +1,27 @@
 <script lang="ts" setup>
-import { type PropType, computed } from "vue"
-import { type RouteRecordRaw } from "vue-router"
-import SidebarItemLink from "./SidebarItemLink.vue"
-import { isExternal } from "@/utils/validate"
-import path from "path-browserify"
+import { type PropType, computed } from 'vue'
+import { type RouteRecordRaw } from 'vue-router'
+import SidebarItemLink from './SidebarItemLink.vue'
+import { isExternal } from '@/utils/validate'
+import path from 'path-browserify'
 
 const props = defineProps({
   item: {
     type: Object as PropType<RouteRecordRaw>,
-    required: true
+    required: true,
   },
   isCollapse: {
     type: Boolean,
-    default: false
+    default: false,
   },
   isFirstLevel: {
     type: Boolean,
-    default: true
+    default: true,
   },
   basePath: {
     type: String,
-    default: ""
-  }
+    default: '',
+  },
 })
 
 const alwaysShowRootMenu = computed(() => {
@@ -51,7 +51,7 @@ const theOnlyOneChild = computed(() => {
   }
   // If there is no children, return itself with path removed,
   // because this.basePath already contains item's path information
-  return { ...props.item, path: "" }
+  return { ...props.item, path: '' }
 })
 
 const resolvePath = (routePath: string) => {

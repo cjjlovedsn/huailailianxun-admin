@@ -4,14 +4,14 @@ export const isExternal = (path: string) => {
 }
 
 export const isArray = (arg: any) => {
-  if (typeof Array.isArray === "undefined") {
-    return Object.prototype.toString.call(arg) === "[object Array]"
+  if (typeof Array.isArray === 'undefined') {
+    return Object.prototype.toString.call(arg) === '[object Array]'
   }
   return Array.isArray(arg)
 }
 
 export function isString(str: any) {
-  if (typeof str === "string" || str instanceof String) {
+  if (typeof str === 'string' || str instanceof String) {
     return true
   }
   return false

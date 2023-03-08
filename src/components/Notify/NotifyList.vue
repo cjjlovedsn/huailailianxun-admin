@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { PropType } from "vue"
-import { type IListItem } from "./data"
+import { PropType } from 'vue'
+import { type IListItem } from './data'
 
 const props = defineProps({
   list: {
     type: Object as PropType<IListItem[]>,
-    required: true
-  }
+    required: true,
+  },
 })
 </script>
 
@@ -28,7 +28,7 @@ const props = defineProps({
       </div>
     </template>
     <div class="card-body">
-      {{ item.description ?? "No Data" }}
+      {{ item.description ?? 'No Data' }}
     </div>
   </el-card>
 </template>

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { computed, ref } from "vue"
-import { ElScrollbar } from "element-plus"
-import { ArrowLeft, ArrowRight } from "@element-plus/icons-vue"
-import { useSettingsStore } from "@/store/modules/settings"
-import Screenfull from "@/components/Screenfull/index.vue"
+import { computed, ref } from 'vue'
+import { ElScrollbar } from 'element-plus'
+import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
+import { useSettingsStore } from '@/store/modules/settings'
+import Screenfull from '@/components/Screenfull/index.vue'
 
 const settingsStore = useSettingsStore()
 
@@ -21,7 +21,7 @@ const scroll = ({ scrollLeft }: { scrollLeft: number }) => {
 }
 
 /** 点击滚动 */
-const scrollTo = (direction: "left" | "right") => {
+const scrollTo = (direction: 'left' | 'right') => {
   let scrollLeft = 0
   /** 可滚动内容的长度 */
   const scrollbarContentRefWidth = scrollbarContentRef.value!.clientWidth
@@ -31,7 +31,7 @@ const scrollTo = (direction: "left" | "right") => {
   const lastDistance = scrollbarContentRefWidth - scrollbarRefWidth - currentScrollLeft
   // 没有横向滚动条，直接结束
   if (scrollbarRefWidth > scrollbarContentRefWidth) return
-  if (direction === "left") {
+  if (direction === 'left') {
     scrollLeft = Math.max(0, currentScrollLeft - translateDistance)
   } else {
     scrollLeft = Math.min(currentScrollLeft + translateDistance, currentScrollLeft + lastDistance)

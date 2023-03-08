@@ -1,6 +1,6 @@
-import { watch, onBeforeMount, onMounted, onBeforeUnmount } from "vue"
-import { useRoute } from "vue-router"
-import { useAppStore, DeviceType } from "@/store/modules/app"
+import { watch, onBeforeMount, onMounted, onBeforeUnmount } from 'vue'
+import { useRoute } from 'vue-router'
+import { useAppStore, DeviceType } from '@/store/modules/app'
 
 /** 参考 Bootstrap 的响应式设计 WIDTH = 992 */
 const WIDTH = 992
@@ -35,7 +35,7 @@ export default () => {
   )
 
   onBeforeMount(() => {
-    window.addEventListener("resize", _resizeHandler)
+    window.addEventListener('resize', _resizeHandler)
   })
 
   onMounted(() => {
@@ -46,6 +46,6 @@ export default () => {
   })
 
   onBeforeUnmount(() => {
-    window.removeEventListener("resize", _resizeHandler)
+    window.removeEventListener('resize', _resizeHandler)
   })
 }

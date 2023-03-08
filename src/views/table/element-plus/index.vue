@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { reactive, ref, watch } from "vue"
-import { createTableDataApi, deleteTableDataApi, updateTableDataApi, getTableDataApi } from "@/api/table"
-import { type IGetTableData } from "@/api/table/types/table"
-import { type FormInstance, type FormRules, ElMessage, ElMessageBox } from "element-plus"
-import { Search, Refresh, CirclePlus, Delete, Download, RefreshRight } from "@element-plus/icons-vue"
-import { usePagination } from "@/hooks/usePagination"
+import { reactive, ref, watch } from 'vue'
+import { createTableDataApi, deleteTableDataApi, updateTableDataApi, getTableDataApi } from '@/api/table'
+import { type IGetTableData } from '@/api/table/types/table'
+import { type FormInstance, type FormRules, ElMessage, ElMessageBox } from 'element-plus'
+import { Search, Refresh, CirclePlus, Delete, Download, RefreshRight } from '@element-plus/icons-vue'
+import { usePagination } from '@/hooks/usePagination'
 
 defineOptions({
-  name: "ElementPlus"
+  name: 'ElementPlus',
 })
 
 const loading = ref<boolean>(false)
@@ -17,12 +17,12 @@ const { paginationData, handleCurrentChange, handleSizeChange } = usePagination(
 const dialogVisible = ref<boolean>(false)
 const formRef = ref<FormInstance | null>(null)
 const formData = reactive({
-  username: "",
-  password: ""
+  username: '',
+  password: '',
 })
 const formRules: FormRules = reactive({
-  username: [{ required: true, trigger: "blur", message: "请输入用户名" }],
-  password: [{ required: true, trigger: "blur", message: "请输入密码" }]
+  username: [{ required: true, trigger: 'blur', message: '请输入用户名' }],
+  password: [{ required: true, trigger: 'blur', message: '请输入密码' }],
 })
 const handleCreate = () => {
   formRef.value?.validate((valid: boolean) => {
@@ -30,18 +30,18 @@ const handleCreate = () => {
       if (currentUpdateId.value === undefined) {
         createTableDataApi({
           username: formData.username,
-          password: formData.password
+          password: formData.password,
         }).then(() => {
-          ElMessage.success("新增成功")
+          ElMessage.success('新增成功')
           dialogVisible.value = false
           getTableData()
         })
       } else {
         updateTableDataApi({
           id: currentUpdateId.value,
-          username: formData.username
+          username: formData.username,
         }).then(() => {
-          ElMessage.success("修改成功")
+          ElMessage.success('修改成功')
           dialogVisible.value = false
           getTableData()
         })
@@ -53,20 +53,20 @@ const handleCreate = () => {
 }
 const resetForm = () => {
   currentUpdateId.value = undefined
-  formData.username = ""
-  formData.password = ""
+  formData.username = ''
+  formData.password = ''
 }
 //#endregion
 
 //#region 删
 const handleDelete = (row: IGetTableData) => {
-  ElMessageBox.confirm(`正在删除用户：${row.username}，确认删除？`, "提示", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning"
+  ElMessageBox.confirm(`正在删除用户：${row.username}，确认删除？`, '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
   }).then(() => {
     deleteTableDataApi(row.id).then(() => {
-      ElMessage.success("删除成功")
+      ElMessage.success('删除成功')
       getTableData()
     })
   })
@@ -86,8 +86,8 @@ const handleUpdate = (row: IGetTableData) => {
 const tableData = ref<IGetTableData[]>([])
 const searchFormRef = ref<FormInstance | null>(null)
 const searchData = reactive({
-  username: "",
-  phone: ""
+  username: '',
+  phone: '',
 })
 const getTableData = () => {
   loading.value = true
@@ -95,7 +95,7 @@ const getTableData = () => {
     currentPage: paginationData.currentPage,
     size: paginationData.pageSize,
     username: searchData.username || undefined,
-    phone: searchData.phone || undefined
+    phone: searchData.phone || undefined,
   })
     .then((res) => {
       paginationData.total = res.data.total
