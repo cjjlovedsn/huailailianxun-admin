@@ -41,20 +41,19 @@ export const constantRoutes: RouteRecordRaw[] = [
   },
   {
     path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index.vue'),
-        name: 'Dashboard',
-        meta: {
-          title: '首页',
-          svgIcon: 'dashboard',
-          affix: true,
-        },
-      },
-    ],
+    redirect: '/messages',
+    // children: [
+    //   {
+    //     path: 'dashboard',
+    //     component: () => import('@/views/dashboard/index.vue'),
+    //     name: 'Dashboard',
+    //     meta: {
+    //       title: '首页',
+    //       svgIcon: 'dashboard',
+    //       affix: true,
+    //     },
+    //   },
+    // ],
   },
   {
     path: '/messages',
@@ -66,6 +65,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: 'messages',
         meta: {
           title: '信息列表',
+          svgIcon: 'publish',
         },
       },
     ],
@@ -80,6 +80,22 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: 'resources',
         meta: {
           title: '资源列表',
+          svgIcon: 'resource',
+        },
+      },
+    ],
+  },
+  {
+    path: '/siteconfig',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/siteconfig/index.vue'),
+        name: 'siteconfig',
+        meta: {
+          title: '网站配置',
+          svgIcon: 'config',
         },
       },
     ],

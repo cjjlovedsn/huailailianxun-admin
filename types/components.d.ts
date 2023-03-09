@@ -9,6 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ImageUpload: typeof import('./../src/components/ImageUpload/index.vue')['default']
     Notify: typeof import('./../src/components/Notify/index.vue')['default']
     NotifyList: typeof import('./../src/components/Notify/NotifyList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

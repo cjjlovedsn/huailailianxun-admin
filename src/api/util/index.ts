@@ -37,3 +37,56 @@ export function fileList(data: FileListRequestData) {
     data,
   })
 }
+
+export interface QueryCountInfo {
+  /**
+   * 无效消息总量
+   */
+  invalidMessageCount: number
+  /**
+   * 点赞总量
+   */
+  likeCount: number
+  /**
+   * 发布消息总量
+   */
+  publishCount: number
+  /**
+   * 设置置顶总次数
+   */
+  reqTopCount: number
+  /**
+   * 请求分享总量
+   */
+  shareCount: number
+  /**
+   * 今日点赞量
+   */
+  todayLikeCount: number
+  /**
+   * 今日发布消息量
+   */
+  todayPublishCount: number
+  /**
+   * 今日请求置顶量
+   */
+  todayReqTopCount: number
+  /**
+   * 今日请求分享量
+   */
+  todayShareCount: number
+  /**
+   * 现有置顶量
+   */
+  topCount: number
+  /**
+   * 有效消息总量
+   */
+  validMessageCount: number
+}
+
+export function queryCount() {
+  return request<IApiResponseData<QueryCountInfo>>({
+    url: '/admin/count/queryCount',
+  })
+}
