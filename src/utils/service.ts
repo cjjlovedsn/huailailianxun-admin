@@ -27,7 +27,7 @@ function createService() {
         return Promise.reject(new Error('非本系统的接口'))
       } else {
         switch (code) {
-          case 0:
+          case 200:
             // code === 0 代表没有错误
             return apiData
           default:
@@ -92,7 +92,7 @@ function createRequestFunction(service: AxiosInstance) {
     const configDefault = {
       headers: {
         // 携带 Token
-        Authorization: 'Bearer ' + getToken(),
+        'access-token': getToken(),
         'Content-Type': get(config, 'headers.Content-Type', 'application/json'),
       },
       timeout: 5000,
