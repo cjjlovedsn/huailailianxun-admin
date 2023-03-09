@@ -52,9 +52,7 @@ const handleLogin = () => {
   <div class="login-container">
     <ThemeSwitch class="theme-switch" />
     <div class="login-card">
-      <div class="title">
-        <img src="@/assets/layout/logo-text-2.png" />
-      </div>
+      <div class="title">怀来联讯管理系统</div>
       <div class="content">
         <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" @keyup.enter="handleLogin">
           <el-form-item prop="loginName">
@@ -109,6 +107,7 @@ const handleLogin = () => {
       justify-content: center;
       align-items: center;
       height: 150px;
+      font-size: 32px;
       img {
         height: 100%;
       }
