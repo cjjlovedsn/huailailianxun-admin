@@ -89,17 +89,21 @@ function createService() {
 /** 创建请求方法 */
 function createRequestFunction(service: AxiosInstance) {
   return function <T>(config: AxiosRequestConfig): Promise<T> {
-    const configDefault = {
-      headers: {
+    const headers = Object.assign(
+      {
+        ...config.headers,
+        'Content-Type': get(config, 'headers.Content-Type', 'application/json'),
         // 携带 Token
         'access-token': getToken(),
-        'Content-Type': get(config, 'headers.Content-Type', 'application/json'),
       },
+      config.headers
+    )
+    const configDefault = {
       timeout: 5000,
       baseURL: import.meta.env.VITE_BASE_API,
       data: {},
     }
-    return service(Object.assign(configDefault, config))
+    return service(Object.assign(configDefault, config, { headers }))
   }
 }
 

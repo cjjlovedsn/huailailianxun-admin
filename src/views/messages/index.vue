@@ -23,11 +23,11 @@
       </el-form>
     </el-card>
     <el-card v-loading="loading" shadow="never">
-      <div class="toolbar-wrapper">
-        <!-- <div>
-          <el-button type="primary" :icon="CirclePlus" @click="dialogVisible = true">新增用户</el-button>
-          <el-button type="danger" :icon="Delete">批量删除</el-button>
+      <div class="flex mb-5">
+        <div>
+          <el-button type="primary" :icon="CirclePlus" @click="add">新增</el-button>
         </div>
+        <!--
         <div>
           <el-tooltip content="下载">
             <el-button type="primary" :icon="Download" circle />
@@ -48,12 +48,25 @@
             </template>
           </el-table-column>
           <el-table-column prop="typeName" label="分类" align="center" />
-          <el-table-column prop="content" label="内容" align="center" />
+          <el-table-column prop="content" label="内容" align="center">
+            <template #default="{ row }">
+              <div v-html="row.content" style="max-height: 2em" />
+            </template>
+          </el-table-column>
           <el-table-column prop="nickName" label="昵称" align="center" />
           <el-table-column prop="images" label="图片" align="center">
             <template #default="{ row }">
               <div class="grid auto-cols-fr grid-cols-3">
-                <el-image v-for="(src, i) in row.images" :key="i" :src="src" fit="fill" :lazy="true" />
+                <el-image
+                  v-for="(src, i) in row.images"
+                  :key="i"
+                  :src="src"
+                  fit="fill"
+                  :initial-index="i"
+                  :preview-src-list="row.images"
+                  :lazy="true"
+                  preview-teleported
+                />
               </div>
             </template>
           </el-table-column>
@@ -79,7 +92,7 @@
               }}</el-button>
             </template>
           </el-table-column>
-          <el-table-column fixed="right" label="操作" width="150" align="center">
+          <el-table-column label="操作" fixed="right" width="150" align="center">
             <template #default="{ row }">
               <el-button type="primary" text bg size="small" @click="edit(row)">修改</el-button>
               <el-popconfirm title="确定删除吗" @confirm="deleteOne(row.id)">
@@ -118,7 +131,7 @@ export default {
 <script lang="ts" setup>
 import { usePagination } from '@/hooks/usePagination'
 import { ref, watch } from 'vue'
-import { Search, Refresh } from '@element-plus/icons-vue'
+import { Search, Refresh, CirclePlus } from '@element-plus/icons-vue'
 import { category, messages } from '@/api'
 import { MessageListRequestData, MessageObject } from '@/api/messages'
 import { FormInstance } from 'element-plus'
@@ -169,8 +182,13 @@ function deleteOne(id: string) {
   })
 }
 
+function add() {
+  formEl.value?.create()
+}
+
 function edit(data: MessageObject) {
-  formEl.value?.edit(data)
+  const { id, title, content, images, typeId } = data
+  formEl.value?.edit({ id, title, content, images, typeId })
 }
 
 function updateStatus(data: MessageObject) {

@@ -70,6 +70,20 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    path: '/resources',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/resources/index.vue'),
+        name: 'resources',
+        meta: {
+          title: '资源列表',
+        },
+      },
+    ],
+  },
 ]
 
 /**

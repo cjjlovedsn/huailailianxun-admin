@@ -39,7 +39,7 @@ export function del(id: string | string[]) {
   return request({
     url: '/admin/message/delete',
     method: 'post',
-    data: { ids: ids.join(',') },
+    data: { ids },
   })
 }
 
@@ -47,12 +47,20 @@ export interface MessageFormData extends Partial<MessageObject> {
   content: string
   images: string[]
   title: string
-  typeId: number
+  typeId?: number
 }
 
 export function create(data: MessageFormData) {
   return request<IApiResponseData<boolean>>({
     url: '/admin/message/publish',
+    method: 'post',
+    data,
+  })
+}
+
+export function update(data: MessageFormData) {
+  return request<IApiResponseData<boolean>>({
+    url: '/admin/message/edit',
     method: 'post',
     data,
   })
