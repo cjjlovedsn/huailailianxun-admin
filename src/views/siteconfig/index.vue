@@ -23,7 +23,7 @@
           <image-upload :images="[info.topImg]" :limit="1" @update:images="info.topImg = $event[0]" />
         </el-form-item>
         <el-form-item label="分享标题" prop="shareTitle">
-          <el-input v-model="info.shareDesc" />
+          <el-input v-model="info.shareTitle" />
         </el-form-item>
         <el-form-item label="分享描述" prop="shareDesc">
           <el-input v-model="info.shareDesc" />

@@ -161,6 +161,7 @@ function getTableData() {
     )
     .then((res) => {
       tableData.value = res.data.list
+      paginationData.total = res.data.total
     })
 }
 
