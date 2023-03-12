@@ -10,26 +10,15 @@
       <el-form-item prop="title" label="标题">
         <el-input v-model="formData.title" placeholder="请输入" />
       </el-form-item>
-      <el-form-item prop="typeId" label="分类">
-        <el-select v-model="formData.typeId" placeholder="请选择" clearable filterable>
-          <el-option v-for="item in categoryList" :key="item.id" :label="item.title" :value="item.id" />
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="content" label="内容">
-        <div class="w-full">
-          <QuillEditor v-model:content="formData.content" theme="snow" content-type="html" />
-        </div>
-      </el-form-item>
-      <el-form-item label="图片" prop="images">
+      <el-form-item label="Logo" prop="logo">
         <el-upload
           v-model:file-list="fileList"
           action="#"
           list-type="picture-card"
-          multiple
           accept="image/*,video/*"
           :http-request="httpRequest"
           :limit="9"
-          :disabled="fileList.length >= 9"
+          :disabled="fileList.length >= 1"
           :on-success="onUploaded"
           :on-exceed="onExceed"
           :before-upload="beforeUpload"
@@ -55,12 +44,12 @@
 
 <script lang="ts">
 export default {
-  name: 'MessageForm',
+  name: 'CategoryForm',
 }
 </script>
 
 <script lang="ts" setup>
-import { MessageFormData } from '@/api/messages'
+import { CategoryFormData } from '@/api/category'
 import {
   ElMessage,
   ElMessageBox,
@@ -72,10 +61,9 @@ import {
   UploadUserFile,
 } from 'element-plus'
 import type { IFormRules } from 'types/app'
-import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { CategoryInfo } from '@/api/category'
-import { category, messages, util } from '@/api'
+import { category, util } from '@/api'
 
 interface Emits {
   (event: 'change'): void
@@ -87,7 +75,7 @@ const visible = ref(false)
 const type = ref<'create' | 'edit'>('create')
 const formRef = ref<FormInstance | null>(null)
 const categoryList = ref<CategoryInfo[]>([])
-const rules: IFormRules<keyof MessageFormData> = {
+const rules: IFormRules<keyof CategoryFormData> = {
   title: [
     {
       required: true,
@@ -97,10 +85,9 @@ const rules: IFormRules<keyof MessageFormData> = {
   ],
 }
 
-const formData = ref<MessageFormData>({
-  images: [],
+const formData = ref<CategoryFormData>({
   title: '',
-  content: '',
+  logo: '',
 })
 
 const fileList = shallowRef<Partial<UploadUserFile>[]>([])
@@ -130,14 +117,14 @@ function onUploaded(response: any, uploadFile: UploadFile, uploadFiles: UploadFi
 const loading = ref(false)
 function submit() {
   if (type.value === 'create') {
-    return messages.create({
+    return category.create({
       ...formData.value,
-      images: fileList.value.map((item) => item.url).filter(Boolean) as string[],
+      logo: fileList.value[0]?.url,
     })
   }
-  return messages.update({
+  return category.update({
     ...formData.value,
-    images: fileList.value.map((item) => item.url).filter(Boolean) as string[],
+    logo: fileList.value[0]?.url,
   })
 }
 
@@ -196,20 +183,19 @@ function beforeClose(done: () => void) {
 }
 
 defineExpose({
-  edit(data: MessageFormData) {
+  edit(data: CategoryFormData) {
     type.value = 'edit'
     visible.value = true
     nextTick(() => {
       formData.value = Object.assign(formData.value, data)
-      fileList.value = (data.images ?? []).map((url) => ({ url }))
+      fileList.value = [data.logo].filter(Boolean).map((url) => ({ url }))
     })
   },
   create() {
     type.value = 'create'
     formData.value = {
-      images: [],
+      logo: '',
       title: '',
-      content: '',
     }
     visible.value = true
   },

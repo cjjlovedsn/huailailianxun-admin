@@ -71,6 +71,21 @@ export const constantRoutes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/category',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/category/index.vue'),
+        name: 'category',
+        meta: {
+          title: '分类管理',
+          svgIcon: 'category',
+        },
+      },
+    ],
+  },
+  {
     path: '/resources',
     component: Layout,
     children: [
