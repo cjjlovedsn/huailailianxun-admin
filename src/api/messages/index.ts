@@ -63,6 +63,7 @@ export function update(data: MessageFormData) {
     url: '/admin/message/edit',
     method: 'post',
     data,
+    timeout: 10 * 60 * 1000,
   })
 }
 

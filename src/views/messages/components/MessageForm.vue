@@ -26,7 +26,7 @@
           action="#"
           list-type="picture-card"
           multiple
-          accept="image/*"
+          accept="image/*,video/*"
           :http-request="httpRequest"
           :limit="9"
           :disabled="fileList.length >= 9"
@@ -71,7 +71,7 @@ import {
   UploadRequestOptions,
   UploadUserFile,
 } from 'element-plus'
-import { IFormRules } from 'types/app'
+import type { IFormRules } from 'types/app'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { CategoryInfo } from '@/api/category'
@@ -182,6 +182,8 @@ function beforeClose(done: () => void) {
     ElMessageBox.confirm('有文件正在上传中，确认关闭对话框？')
       .then(done)
       .catch(() => {})
+  } else {
+    done()
   }
 }
 

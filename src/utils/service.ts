@@ -79,7 +79,11 @@ function createService() {
         default:
           break
       }
-      ElMessage.error(error.message)
+      if (error.message && error.message.includes('timeout')) {
+        ElMessage.error('请求超时，请重试')
+      } else {
+        ElMessage.error(error.message)
+      }
       return Promise.reject(error)
     }
   )
