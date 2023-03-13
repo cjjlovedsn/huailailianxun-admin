@@ -2,11 +2,8 @@
   <div class="app-container">
     <el-card v-loading="loading" shadow="never" class="search-wrapper">
       <el-form ref="searchFormRef" :inline="true" :model="searchData" @submit.prevent="getTableData">
-        <el-form-item prop="fileName" label="文件名">
-          <el-input v-model="searchData.fileName" placeholder="请输入" />
-        </el-form-item>
-        <el-form-item prop="fileKey" label="ID">
-          <el-input v-model="searchData.fileKey" placeholder="请输入" />
+        <el-form-item prop="title" label="标题">
+          <el-input v-model="searchData.title" placeholder="请输入" />
         </el-form-item>
         <el-form-item prop="status" label="状态">
           <el-radio-group v-model="searchData.status">
@@ -21,30 +18,47 @@
       </el-form>
     </el-card>
     <el-card v-loading="loading" shadow="never">
+      <div class="flex mb-5">
+        <div>
+          <el-button type="primary" :icon="CirclePlus" @click="add">新增</el-button>
+        </div>
+        <!--
+        <div>
+          <el-tooltip content="下载">
+            <el-button type="primary" :icon="Download" circle />
+          </el-tooltip>
+          <el-tooltip content="刷新表格">
+            <el-button type="primary" :icon="RefreshRight" circle @click="handleRefresh" />
+          </el-tooltip>
+        </div> -->
+      </div>
       <div class="table-wrapper">
         <el-table :data="tableData">
-          <el-table-column prop="fileKey" label="ID" align="center" />
-          <el-table-column prop="fileOrigName" label="文件原始名称" align="center" show-overflow-tooltip />
-          <el-table-column prop="avator" label="七牛云地址" align="center" show-overflow-tooltip>
+          <el-table-column type="selection" width="50" align="center" />
+          <el-table-column prop="id" label="ID" align="center" />
+          <el-table-column prop="title" label="标题" align="center" />
+          <el-table-column prop="images" label="图片" align="center">
             <template #default="{ row }">
-              <el-link :href="row.address">{{ row.address }}</el-link>
+              <el-image v-if="row.logo" :src="row.logo" fit="fill" class="w-8 h-8" :lazy="true" preview-teleported />
             </template>
           </el-table-column>
-          <el-table-column prop="filePath" label="文件路径	" align="center" show-overflow-tooltip />
-          <el-table-column prop="fileSize" label="文件大小	" align="center" />
-          <el-table-column prop="fileType" label="文件类型	" align="center" />
-          <el-table-column prop="uploadTime" label="上传时间" align="center" />
+          <el-table-column prop="createTime" label="创建时间" align="center" />
           <el-table-column prop="updateTime" label="更新时间" align="center" />
           <el-table-column prop="statusText" label="状态" align="center">
             <template #default="{ row }">
-              <span v-if="row.status === '0'">正常</span>
-              <span v-else-if="row.status === '1'">关闭</span>
+              <el-button
+                text
+                :type="row.status === 0 ? 'primary' : 'danger'"
+                size="default"
+                @click="updateStatus(row)"
+                >{{ row.status === 0 ? '有效' : '无效' }}</el-button
+              >
             </template>
           </el-table-column>
-          <el-table-column prop="remark" label="备注" align="center" />
           <el-table-column label="操作" fixed="right" width="150" align="center">
             <template #default="{ row }">
-              <el-popconfirm title="确定删除吗" @confirm="deleteOne(row.fileKey)">
+              <el-button type="primary" text bg size="small" @click="edit(row)">修改</el-button>
+              <el-popconfirm title="确定删除吗" @confirm="deleteOne(row.id)">
                 <template #reference>
                   <el-button type="danger" text bg size="small">删除</el-button>
                 </template>
@@ -66,38 +80,41 @@
         />
       </div>
     </el-card>
+    <!-- 新增/修改 -->
+    <CarouselForm ref="formEl" @change="resetSearch" />
   </div>
 </template>
 
 <script lang="ts">
 export default {
-  name: 'MessageList',
+  name: 'CarouselList',
 }
 </script>
 
 <script lang="ts" setup>
 import { usePagination } from '@/hooks/usePagination'
 import { ref, watch } from 'vue'
-import { Search, Refresh } from '@element-plus/icons-vue'
-import { util } from '@/api'
-import { MessageObject } from '@/api/messages'
+import { Search, Refresh, CirclePlus } from '@element-plus/icons-vue'
+import { carousel } from '@/api'
+import { CarouselListRequestData, CarouselData } from '@/api/carousel'
 import { ElMessage, FormInstance } from 'element-plus'
-import { FileListRequestData } from '@/api/util'
+import CarouselForm from './components/CarouselForm.vue'
 
 const searchFormRef = ref<FormInstance | null>(null)
+const formEl = ref<InstanceType<typeof CarouselForm> | null>(null)
 const loading = ref(false)
-const tableData = ref<MessageObject[]>([])
-const searchData = ref<FileListRequestData>({
+const tableData = ref<CarouselData[]>([])
+const searchData = ref<CarouselListRequestData>({
   pageNo: 1,
   pageSize: 20,
-  fileName: '',
+  title: '',
 })
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
 function getTableData() {
-  util
-    .fileList(
+  carousel
+    .list(
       Object.assign(searchData.value, {
         pageNo: paginationData.currentPage,
         pageSize: paginationData.pageSize,
@@ -117,9 +134,24 @@ const resetSearch = () => {
   paginationData.currentPage = 1
 }
 
-function deleteOne(id: string) {
-  util.deleteFile(id).then(() => {
+function deleteOne(id: number) {
+  carousel.del(id).then(() => {
     ElMessage.success('删除成功')
+    getTableData()
+  })
+}
+
+function add() {
+  formEl.value?.create()
+}
+
+function edit(data: CarouselData) {
+  const { id, title, content, image, type = 0 } = data
+  formEl.value?.edit({ id, title, content, image, type })
+}
+
+function updateStatus(data: CarouselData) {
+  carousel.setStatus(data.id, data.status === 0 ? 1 : 0).then(() => {
     getTableData()
   })
 }

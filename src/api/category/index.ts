@@ -73,7 +73,7 @@ export function update(data: CategoryFormData) {
 }
 
 /**
- * 修改分类
+ * 删除分类
  */
 export function del(id: number | number[]) {
   return request({

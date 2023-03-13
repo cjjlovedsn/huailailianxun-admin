@@ -10,39 +10,22 @@
       <el-form-item prop="title" label="标题">
         <el-input v-model="formData.title" placeholder="请输入" />
       </el-form-item>
-      <el-form-item prop="typeId" label="分类">
-        <el-select v-model="formData.typeId" placeholder="请选择" clearable filterable>
-          <el-option v-for="item in categoryList" :key="item.id" :label="item.title" :value="item.id" />
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="content" label="内容">
-        <div class="w-full">
-          <QuillEditor v-model:content="formData.content" theme="snow" content-type="html" />
-        </div>
-      </el-form-item>
-      <el-form-item label="图片" prop="images">
+      <el-form-item label="图片" prop="image">
         <el-upload
           v-model:file-list="fileList"
           action="#"
           list-type="picture-card"
-          multiple
-          accept="image/*,video/mp4"
+          accept="image/*"
           :http-request="httpRequest"
           :limit="9"
-          :disabled="fileList.length >= 9"
+          :disabled="fileList.length >= 1"
           :on-success="onUploaded"
           :on-exceed="onExceed"
           :before-upload="beforeUpload"
         >
           <el-icon><Plus /></el-icon>
           <template #file="{ file }">
-            <video
-              v-if="file.url && file.url.endsWith('.mp4')"
-              class="el-upload-list__item-thumbnail"
-              :src="file.url"
-              style="object-fit: cover"
-            />
-            <el-image v-else class="el-upload-list__item-thumbnail" :src="file.url" :preview-src-list="images" />
+            <el-image class="el-upload-list__item-thumbnail" :src="file.url" :preview-src-list="images" />
             <span class="el-upload-list__item-actions">
               <span class="el-upload-list__item-delete" @click="handleRemove(file)">
                 <el-icon><Delete /></el-icon>
@@ -50,6 +33,11 @@
             </span>
           </template>
         </el-upload>
+      </el-form-item>
+      <el-form-item prop="content" label="内容">
+        <div class="w-full">
+          <QuillEditor v-model:content="formData.content" theme="snow" content-type="html" />
+        </div>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -61,12 +49,12 @@
 
 <script lang="ts">
 export default {
-  name: 'MessageForm',
+  name: 'CategoryForm',
 }
 </script>
 
 <script lang="ts" setup>
-import { MessageFormData } from '@/api/messages'
+import { CarouselFormData } from '@/api/carousel'
 import {
   ElMessage,
   ElMessageBox,
@@ -78,10 +66,10 @@ import {
   UploadUserFile,
 } from 'element-plus'
 import type { IFormRules } from 'types/app'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
+import { carousel, util } from '@/api'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { CategoryInfo } from '@/api/category'
-import { category, messages, util } from '@/api'
 
 interface Emits {
   (event: 'change'): void
@@ -92,8 +80,7 @@ const emit = defineEmits<Emits>()
 const visible = ref(false)
 const type = ref<'create' | 'edit'>('create')
 const formRef = ref<FormInstance | null>(null)
-const categoryList = ref<CategoryInfo[]>([])
-const rules: IFormRules<keyof MessageFormData> = {
+const rules: IFormRules<keyof CarouselFormData> = {
   title: [
     {
       required: true,
@@ -101,19 +88,13 @@ const rules: IFormRules<keyof MessageFormData> = {
       message: '请输入标题',
     },
   ],
-  typeId: [
-    {
-      required: true,
-      trigger: 'blur',
-      message: '请选择分类',
-    },
-  ],
 }
 
-const formData = ref<MessageFormData>({
-  images: [],
+const formData = ref<CarouselFormData>({
   title: '',
+  image: '',
   content: '',
+  type: 0,
 })
 
 const fileList = shallowRef<Partial<UploadUserFile>[]>([])
@@ -143,14 +124,15 @@ function onUploaded(response: any, uploadFile: UploadFile, uploadFiles: UploadFi
 const loading = ref(false)
 function submit() {
   if (type.value === 'create') {
-    return messages.create({
+    return carousel.create({
       ...formData.value,
-      images: fileList.value.map((item) => item.url).filter(Boolean) as string[],
+      type: 0,
+      image: fileList.value[0]?.url,
     })
   }
-  return messages.update({
+  return carousel.update({
     ...formData.value,
-    images: fileList.value.map((item) => item.url).filter(Boolean) as string[],
+    image: fileList.value[0]?.url,
   })
 }
 
@@ -194,10 +176,6 @@ function resetForm() {
   formRef.value?.resetFields()
 }
 
-category.all().then((res) => {
-  categoryList.value = res.data
-})
-
 function beforeClose(done: () => void) {
   if (uploading.value) {
     ElMessageBox.confirm('有文件正在上传中，确认关闭对话框？')
@@ -209,20 +187,19 @@ function beforeClose(done: () => void) {
 }
 
 defineExpose({
-  edit(data: MessageFormData) {
+  edit(data: CarouselFormData) {
     type.value = 'edit'
     visible.value = true
     nextTick(() => {
       formData.value = Object.assign(formData.value, data)
-      fileList.value = (data.images ?? []).map((url) => ({ url }))
+      fileList.value = [data.image].filter(Boolean).map((url) => ({ url }))
     })
   },
   create() {
     type.value = 'create'
     formData.value = {
-      images: [],
+      image: '',
       title: '',
-      content: '',
     }
     visible.value = true
   },

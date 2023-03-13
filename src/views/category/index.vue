@@ -87,7 +87,7 @@
 
 <script lang="ts">
 export default {
-  name: 'MessageList',
+  name: 'CategoryList',
 }
 </script>
 
@@ -97,7 +97,7 @@ import { ref, watch } from 'vue'
 import { Search, Refresh, CirclePlus } from '@element-plus/icons-vue'
 import { category } from '@/api'
 import { CategoryListRequestData, CategoryData } from '@/api/category'
-import { FormInstance } from 'element-plus'
+import { ElMessage, FormInstance } from 'element-plus'
 import { CategoryInfo } from '@/api/category'
 import CategoryForm from './components/CategoryForm.vue'
 
@@ -142,6 +142,7 @@ category.all().then((res) => {
 
 function deleteOne(id: number) {
   category.del(id).then(() => {
+    ElMessage.success('删除成功')
     getTableData()
   })
 }

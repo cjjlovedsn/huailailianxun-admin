@@ -134,7 +134,7 @@ import { ref, watch } from 'vue'
 import { Search, Refresh, CirclePlus } from '@element-plus/icons-vue'
 import { category, messages } from '@/api'
 import { MessageListRequestData, MessageObject } from '@/api/messages'
-import { FormInstance } from 'element-plus'
+import { ElMessage, FormInstance } from 'element-plus'
 import { CategoryInfo } from '@/api/category'
 import MessageForm from './components/MessageForm.vue'
 
@@ -179,6 +179,7 @@ category.all().then((res) => {
 
 function deleteOne(id: string) {
   messages.del(id).then(() => {
+    ElMessage.success('删除成功')
     getTableData()
   })
 }

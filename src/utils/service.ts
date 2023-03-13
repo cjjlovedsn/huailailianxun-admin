@@ -30,6 +30,11 @@ function createService() {
           case 200:
             // code === 0 代表没有错误
             return apiData
+          case 203:
+            // Token 过期时，直接退出登录并强制刷新页面（会重定向到登录页）
+            useUserStoreHook().logout()
+            location.reload()
+            return Promise.reject(new Error('Error'))
           default:
             // 不是正确的 Code
             ElMessage.error(apiData.message || 'Error')
@@ -103,7 +108,7 @@ function createRequestFunction(service: AxiosInstance) {
       config.headers
     )
     const configDefault = {
-      timeout: 5000,
+      timeout: 10 * 1000 * 60,
       baseURL: import.meta.env.VITE_BASE_API,
       data: {},
     }

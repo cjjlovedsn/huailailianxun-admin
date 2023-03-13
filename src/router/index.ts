@@ -86,6 +86,21 @@ export const constantRoutes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/carousel',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/carousel/index.vue'),
+        name: 'carousel',
+        meta: {
+          title: '轮播图管理',
+          svgIcon: 'category',
+        },
+      },
+    ],
+  },
+  {
     path: '/resources',
     component: Layout,
     children: [
