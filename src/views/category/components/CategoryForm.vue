@@ -15,7 +15,7 @@
           v-model:file-list="fileList"
           action="#"
           list-type="picture-card"
-          accept="image/*,video/*"
+          accept="image/*"
           :http-request="httpRequest"
           :limit="9"
           :disabled="fileList.length >= 1"

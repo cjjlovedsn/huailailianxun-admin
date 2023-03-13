@@ -26,7 +26,6 @@
           action="#"
           list-type="picture-card"
           multiple
-          accept="image/*,video/mp4"
           :http-request="httpRequest"
           :limit="9"
           :disabled="fileList.length >= 9"
@@ -178,7 +177,11 @@ function beforeUpload(rawFile: UploadRawFile) {
     ElMessage.error('文件大小不能大于20MB')
     return false
   }
-  return true
+  if (/\.(bmp|gif|png|jpe?g|webp|tif|exif|svg|avif|apng|mp4)$/.test(rawFile.name)) {
+    return true
+  }
+  ElMessage.error('请上传图片或者视频')
+  return false
 }
 
 function handleRemove(file: UploadFile) {
