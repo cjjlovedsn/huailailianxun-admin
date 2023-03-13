@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="visible"
-    :title="type === 'create' ? '新增用户' : '修改用户'"
+    :title="type === 'create' ? '新增轮播图' : '修改轮播图'"
     width="80vw"
     :before-close="beforeClose"
     @close="resetForm"
