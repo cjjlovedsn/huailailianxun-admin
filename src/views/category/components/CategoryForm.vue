@@ -148,8 +148,8 @@ function close() {
 }
 
 function beforeUpload(rawFile: UploadRawFile) {
-  if (rawFile.size > 20 * 1024 * 1024) {
-    ElMessage.error('文件大小不能大于20MB')
+  if (rawFile.size > 40 * 1024 * 1024) {
+    ElMessage.error('文件大小不能大于40MB')
     return false
   }
   return true

@@ -22,6 +22,10 @@
         <el-form-item label="置顶" prop="topImg">
           <image-upload :images="[info.topImg]" :limit="1" @update:images="info.topImg = $event[0]" />
         </el-form-item>
+        <el-form-item label="显示天数" prop="area">
+          <el-input-number v-model="info.msgDays" :min="1" :max="365 * 3" />
+          <div class="text-sm text-bluegray ml-4">tips: 设置消息列表只显示多少天内的消息</div>
+        </el-form-item>
         <el-form-item label="分享标题" prop="shareTitle">
           <el-input v-model="info.shareTitle" />
         </el-form-item>

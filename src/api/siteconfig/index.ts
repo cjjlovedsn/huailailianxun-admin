@@ -13,6 +13,7 @@ export interface Siteconfig {
   shareTitle?: string
   siteTitle?: string
   topImg?: string
+  msgDays?: number
 }
 
 export function save(data: Siteconfig) {
