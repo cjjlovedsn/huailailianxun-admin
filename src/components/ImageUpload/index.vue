@@ -60,7 +60,10 @@ watch(
 
 function httpRequest(options: UploadRequestOptions) {
   if (fileList.value.length > 9) return Promise.reject(new Error('选择的文件数量超出限制'))
-  return util.upload(options.file).then((res) => res.data)
+  return util.upload(options.file).then((res) => {
+    if (/^blob/.test(res.data)) throw new Error('上传的文件不正确')
+    return res.data
+  })
 }
 
 function onUploaded(response: any, uploadFile: UploadFile, uploadFiles: UploadFiles) {

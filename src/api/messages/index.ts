@@ -51,6 +51,7 @@ export interface MessageFormData extends Partial<MessageObject> {
 }
 
 export function create(data: MessageFormData) {
+  if (data.images.some((item) => /^blob/.test(item))) throw new Error('上传的文件不正确')
   return request<IApiResponseData<boolean>>({
     url: '/admin/message/publish',
     method: 'post',
@@ -59,6 +60,7 @@ export function create(data: MessageFormData) {
 }
 
 export function update(data: MessageFormData) {
+  if (data.images.some((item) => /^blob/.test(item))) throw new Error('上传的文件不正确')
   return request<IApiResponseData<boolean>>({
     url: '/admin/message/edit',
     method: 'post',
